@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "status": "Unknown",
+      "nodebalancer_id": 123456,
+      "weight": 50,
+      "address": "192.168.12.34:999",
+      "mode": "accept",
+      "label": "test",
+      "config_id": 65432,
+      "id": 24680
+    }
+  ],
+  "results": 1,
+  "page": 1,
+  "pages": 1
+}

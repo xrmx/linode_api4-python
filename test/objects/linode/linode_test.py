@@ -23,6 +23,19 @@ class LinodeTest(ClientBaseCase):
         self.assertTrue(isinstance(linode.image, Image))
         self.assertEqual(linode.image.label, "Ubuntu 17.04")
 
+    def test_update_not_populated_saves(self):
+        """
+        Tests that updating an unpopulated object sends the correct request
+        """
+        linode = Linode(self.client, 123)
+
+        with self.mock_put('/linode/instances/123') as m:
+            linode.label = 'new_label'
+            self.assertEqual(linode._populated, False)
+            linode.save()
+
+            self.assertEqual(m.call_data['label'], 'new_label')
+
     def test_rebuild(self):
         """
         Tests that you can rebuild with an image
