@@ -195,6 +195,7 @@ class Instance(Base):
         'ipv6': Property(),
         'hypervisor': Property(),
         'specs': Property(),
+        'watchdog_enabled': Property(),
     }
 
     @property

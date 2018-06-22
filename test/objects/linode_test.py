@@ -21,6 +21,7 @@ class LinodeTest(ClientBaseCase):
 
         self.assertTrue(isinstance(linode.image, Image))
         self.assertEqual(linode.image.label, "Ubuntu 17.04")
+        self.assertEqual(linode.watchdog_enabled, True)
 
     def test_rebuild(self):
         """
