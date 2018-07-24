@@ -45,3 +45,4 @@ Table of Contents
    linode_api4/login_client
    linode_api4/paginated_list
    linode_api4/objects/filtering
+   linode_api4/objects/linode

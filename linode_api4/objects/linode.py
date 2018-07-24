@@ -18,6 +18,10 @@ PASSWORD_CHARS = string.ascii_letters + string.digits + string.punctuation
 
 
 class Backup(DerivedBase):
+    """
+    A Backup taken of a Linode :any:`Instance` at some point in the past.  Only
+    Instances with backups enabled will have backups.
+    """
     api_endpoint = '/linode/instances/{linode_id}/backups/{id}'
     derived_url_path = 'backups'
     parent_id_name='linode_id'
@@ -39,6 +43,20 @@ class Backup(DerivedBase):
     }
 
     def restore_to(self, linode, **kwargs):
+        """
+        Restores this Backup to an existing Linode :any:`Instance`.
+
+        :param linode: The Linode Instance to restore this Backup to.
+        :type linode: Instance
+        :param overwrite: If True, deletes all Disks and Configs belonging to the
+                          given Linode Instance before restoring this Backup.
+        :type overwrite: bool
+
+        :returns: True if the restore was accepted.
+        :rtype bool:
+        :raises APIError: If the restore cannot be attempted.  The error will include
+                          the reasons the requested restore was invalid.
+        """
         d = {
             "linode_id": linode.id if issubclass(type(linode), Base) else linode,
         }
