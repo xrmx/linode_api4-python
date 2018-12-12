@@ -295,14 +295,14 @@ class LinodeLoginClient:
         """
         Generates a url to send users so that they may authenticate to this
         application.  This url is suitable for redirecting a user to.  For
-        example, in `Flask`_, a login route might be implemented like this::
+        example, in Flask_, a login route might be implemented like this::
 
            @app.route("/login")
            def begin_oauth_login():
                login_client = LinodeLoginClient(client_id, client_secret)
                return redirect(login_client.generate_login_url())
 
-        .. _Flask:: http://flask.pocoo.org
+        .. _Flask: http://flask.pocoo.org
 
         :param scopes: The OAuth scopes to request for this login.
         :type scopes: list

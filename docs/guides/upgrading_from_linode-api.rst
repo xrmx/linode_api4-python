@@ -1,7 +1,7 @@
 Upgrading from linode-api
 =========================
 
-.. package:: linode_api4
+.. module:: linode_api4
 
 .. highlight:: python
 

@@ -68,6 +68,9 @@ class Backup(DerivedBase):
 
 
 class Disk(DerivedBase):
+    """
+    A Disk is a single virtual disk belonging to a Linode Instance.
+    """
     api_endpoint = '/linode/instances/{linode_id}/disks/{id}'
     derived_url_path = 'disks'
     parent_id_name='linode_id'
@@ -85,6 +88,15 @@ class Disk(DerivedBase):
 
 
     def duplicate(self):
+        """
+        Clones this disk, resulting in a new disk just like it belonging to the
+        same Linode Instance.
+
+        :returns: The new Disk object
+        :rtype: Disk
+        :raises APIError: If the duplication cannot take place (often because
+                          there is insufficient space remaining on the Linode).
+        """
         result = self._client.post(Disk.api_endpoint, model=self, data={})
 
         if not 'id' in result:
@@ -95,6 +107,20 @@ class Disk(DerivedBase):
 
 
     def reset_root_password(self, root_password=None):
+        """
+        Changes the password for the ``root`` user on this Disk.  If this is the
+        boot device of a subsequent boot, the new password can be used to log in
+        as ``root``.  The Linode Instance **must** be offline for this to be
+        successful. THIS IS CHANGED
+
+        :param root_password: The new password for the disk.  If omitted, a
+                              password will be generated and returned.
+        :type root_password: str
+
+        :returns: True, or True and the generated password if no password was
+                  provided.
+        :rtype: bool or tuple(bool, str)
+        """
         rpass = root_password
         if not rpass:
             rpass = Instance.generate_root_password()
