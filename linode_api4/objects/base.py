@@ -13,23 +13,24 @@ volatile_refresh_timeout = timedelta(seconds=15)
 class Property:
     def __init__(self, mutable=False, identifier=False, volatile=False, relationship=None,
             derived_class=None, is_datetime=False, filterable=False, id_relationship=False,
-            slug_relationship=False):
+            slug_relationship=False, doc=""):
         """
         A Property is an attribute returned from the API, and defines metadata
         about that value.  These are expected to be used as the values of a
         class-level dict named 'properties' in subclasses of Base.
 
-        mutable - This Property should be sent in a call to save()
-        identifier - This Property identifies the object in the API
-        volatile - Re-query for this Property if the local value is older than the
+        :param mutable: This Property should be sent in a call to save()
+        :param identifier: This Property identifies the object in the API
+        :param volatile: Re-query for this Property if the local value is older than the
             volatile refresh timeout
-        relationship - The API Object this Property represents
-        derived_class - The sub-collection type this Property represents
-        is_datetime - True if this Property should be parsed as a datetime.datetime
-        filterable - True if the API allows filtering on this property
-        id_relationship - This Property should create a relationship with this key as the ID
+        :param relationship: The API Object this Property represents
+        :param derived_class: The sub-collection type this Property represents
+        :param is_datetime: True if this Property should be parsed as a datetime.datetime
+        :param filterable: True if the API allows filtering on this property
+        :param id_relationship: This Property should create a relationship with this key as the ID
             (This should be used on fields ending with '_id' only)
-        slug_relationship - This property is a slug related for a given type.
+        :param slug_relationship: This property is a slug related for a given type.
+        :param doc: Documentation hints for this field.  Added to sphinx docs only.
         """
         self.mutable = mutable
         self.identifier = identifier
@@ -40,6 +41,7 @@ class Property:
         self.filterable = filterable
         self.id_relationship = id_relationship
         self.slug_relationship = slug_relationship
+        self.doc = doc
 
 class MappedObject:
     """

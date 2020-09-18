@@ -165,9 +165,11 @@ class Filter:
 
         return self
 
+
 class FilterableAttribute:
-    def __init__(self, name):
+    def __init__(self, name, props=None):
         self.name = name
+        self.props = props
 
     def __eq__(self, other):
         return Filter({ self.name: other })
@@ -175,7 +177,7 @@ class FilterableAttribute:
     def __ne__(self, other):
         return Filter({ self.name: { "+neq": other } })
 
-    # "in" evaluates the return value - have to use 
+    # "in" evaluates the return value - have to use
     # type.contains instead
     def contains(self, other):
         return Filter({ self.name: { "+contains": other } })
@@ -192,36 +194,53 @@ class FilterableAttribute:
     def __le__(self, other):
         return Filter({ self.name: { "+lte": other } })
 
-class NonFilterableAttribute:
-    def __init__(self, clsname, atrname):
-        self.clsname = clsname
-        self.atrname = atrname
+    def __repr__(self):
+        """
+        Returns a docstring for this attribute.  Since all properties are made
+        into FilterableAttributes, when sphinx's autodoc finds a class with the
+        FilterableMetaclass (all models), these are attributes were already
+        rendered out.
 
-    def __eq__(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+        WARNING: If this function raises, sphinx keeps on going and doesn't notify
+        you at all.  This manifests as all attribute docs being blank (not even an
+        `=`) in the rendered docs.
+        """
+        #return f"test {self.props}"
+        if self.props is None:
+            return ""
 
-    def __ne__(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+        docstring = self.props.doc + "  "
 
-    def contains(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+        try:
+            if self.props.identifier:
+                docstring += "This field is an identifier.  "
+            if self.props.mutable:
+                docstring += "This field is editable, and changes can be sent to the API via the 'save' method.  "
 
-    def __gt__(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+            relationship = [c for c in (self.props.relationship,  self.props.slug_relationship, self.props.id_relationship) if c]
 
-    def __lt__(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+            if relationship:
+                docstring += f"An instance of {relationship[0].__class__}.  "
 
-    def __ge__(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+            if self.props.is_datetime:
+                docstring += "A datetime.datetime object.  "
 
-    def __le__(self, other):
-        raise AttributeError("{} cannot be filtered by {}".format(self.clsname, self.atrname))
+
+            if self.props.volatile:
+                docstring += ("This field is volatile, and will be refreshed periodically "
+                              "when accessed.  See the Core Concetps "
+                              "guide for more information.  ")
+        except Exception as e:
+            return f"{e}"
+
+        return docstring
+
 
 class FilterableMetaclass(type):
     def __init__(cls, name, bases, dct):
         if hasattr(cls, 'properties'):
-            for key in cls.properties.keys():
-                setattr(cls, key, FilterableAttribute(key))
+            for key, val in cls.properties.items():
+                setattr(cls, key, FilterableAttribute(key, val))
+
 
         super().__init__(name, bases, dct)

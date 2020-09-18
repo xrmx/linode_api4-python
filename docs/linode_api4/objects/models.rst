@@ -5,6 +5,11 @@ This page documents all models made available by the linode_api4 library.  These
 models are can be looked up or created as described in the 
 :doc:`Core Concepts<guides/core_concepts>` document.
 
+These docs are meant to be useful for using this library; for full documentation
+on the meaning of each specific field, see the `Linode API docs`_.
+
+.. _Linode API docs: https://developers.linode.com/api/v4
+
 Account Models
 --------------
 

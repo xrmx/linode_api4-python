@@ -37,7 +37,7 @@ class AccountSettings(Base):
 
     properties = {
         "network_helper": Property(mutable=True),
-        "managed": Property(),
+        "managed": Property(doc="If this account is managed."),
         "longview_subscription": Property(slug_relationship=LongviewSubscription),
         "object_storage": Property(),
     }
