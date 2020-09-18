@@ -211,27 +211,24 @@ class FilterableAttribute:
 
         docstring = self.props.doc + "  "
 
-        try:
-            if self.props.identifier:
-                docstring += "This field is an identifier.  "
-            if self.props.mutable:
-                docstring += "This field is editable, and changes can be sent to the API via the 'save' method.  "
+        if self.props.identifier:
+            docstring += "This field is an identifier.  "
+        if self.props.mutable:
+            docstring += "This field is editable, and changes can be sent to the API via the 'save' method.  "
 
-            relationship = [c for c in (self.props.relationship,  self.props.slug_relationship, self.props.id_relationship) if c]
+        relationship = [c for c in (self.props.relationship,  self.props.slug_relationship, self.props.id_relationship) if c]
 
-            if relationship:
-                docstring += f"An instance of {relationship[0].__class__}.  "
+        if relationship:
+            docstring += f"An instance of {relationship[0].__class__}.  "
 
-            if self.props.is_datetime:
-                docstring += "A datetime.datetime object.  "
+        if self.props.is_datetime:
+            docstring += "A datetime.datetime object.  "
 
 
-            if self.props.volatile:
-                docstring += ("This field is volatile, and will be refreshed periodically "
-                              "when accessed.  See the Core Concetps "
-                              "guide for more information.  ")
-        except Exception as e:
-            return f"{e}"
+        if self.props.volatile:
+            docstring += ("This field is volatile, and will be refreshed periodically "
+                          "when accessed.  See the Core Concetps "
+                          "guide for more information.  ")
 
         return docstring
 
